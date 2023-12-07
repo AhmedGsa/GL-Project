@@ -3,6 +3,7 @@ from config.db import get_db
 from sqlalchemy.orm import Session
 from schemas.auth import UserRegisterSchema
 from repositories import user
+from utils.jwt import JWT
 
 router = APIRouter(prefix="/auth", tags=["Authentication"])
 
@@ -16,4 +17,5 @@ def register_user(userRegisterSchema: UserRegisterSchema, db: Session = Depends(
     if userExists:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Email already used")
     newUser = user.create(db, userRegisterSchema)
-    return newUser
+    token = JWT.create_token({"id": newUser.id, "email": newUser.email})
+    return {"token": token}
