@@ -1,12 +1,12 @@
 from sqlalchemy.orm import Session
-from models.models import User, Role
+from models.models import User
 from schemas.auth import UserRegisterSchema
 from utils.hashing import Hash
 from datetime import datetime
 
 
 def create(db: Session, userSchema: UserRegisterSchema):
-    user = User(nom = userSchema.nom, prenom = userSchema.prenom, email = userSchema.email, password = Hash.bcrypt(userSchema.password), role = Role.user, createdAt = datetime.now())
+    user = User(nom = userSchema.nom, prenom = userSchema.prenom, email = userSchema.email, password = Hash.bcrypt(userSchema.password), role = 'user', createdAt = datetime.now())
     db.add(user)
     db.commit()
     db.refresh(user)

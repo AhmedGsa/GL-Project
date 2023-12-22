@@ -1,28 +1,22 @@
+from fastapi import status ,HTTPException
 from sqlalchemy.orm import Session
-from models.models import User, Role,Avocat,Category,CategoryEnum
-from schemas.auth import AvocatRegisterSchema
+from models import models
+from schemas import avocat
 from utils.hashing import Hash
-from datetime import datetime
 
 
-def create(db: Session, avocatSchema: AvocatRegisterSchema):
-    user = User(nom = avocatSchema.nom, prenom = avocatSchema.prenom, email = avocatSchema.email, password = Hash.bcrypt(avocatSchema.password), role = Role.user, createdAt = datetime.now())
-    db.add(user)
+def Avocatcreate(request :avocat.AvocatSchema,db: Session):
+    new_avocat = models.Avocat(nom= request.nom,prenom = request.prenom,email = request.email,password = Hash.bcrypt(request.hashed_password),createdAt=request.createdAt,role = "avocat",adress =request.adress,phoneNumber = request.phoneNumber,facebookUrl = request.facebookUrl,description = request.description)
+    db.add(new_avocat)
     db.commit()
-    db.refresh(user)
-    avocat = Avocat(userid = user.id,facebookurl = avocatSchema.facebookURL)
-    db.add(avocat)
-    db.commit()
-    db.refresh(avocat)
-
-    for cat in avocatSchema.categories:
-        category = Category(avocatId = avocat.id,category =CategoryEnum(cat))
-        db.add(category)
-        db.commit()
-        db.refresh(category)
-
-    return user
+    db.refresh(new_avocat)
+    return new_avocat
 
 def get_by_email(db: Session, email: str):
-    user = db.query(User).filter(User.email == email).first()
+    user = db.query(models.User).filter(models.User.email == email).first()
     return user
+
+
+def get_avocat_by_email(db: Session, email: str):
+    avocat = db.query(models.Avocat).filter(models.Avocat.email == email).first()
+    return avocat

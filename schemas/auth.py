@@ -1,7 +1,7 @@
 from datetime import datetime
-from models import Role ,CategoryEnum
 from pydantic import BaseModel
-from typing import List
+from typing import List,Optional
+
 
 class LoginSchema(BaseModel):
     email: str
@@ -10,22 +10,24 @@ class LoginSchema(BaseModel):
 class UserRegisterSchema(LoginSchema):
     nom: str
     prenom: str
+    email:str
 
-class AvocatRegisterSchema(UserRegisterSchema):
-    facebookURL : str
-    categories : List[str]
+# class AvocatRegisterSchema(UserRegisterSchema):
+#     facebookURL : str
+#     categories : List[str]
 
-class AvocatBase(BaseModel):
+class AvocatRegisterSchema(BaseModel):
    nom: str
    prenom: str
    email: str
-   password: str
+   hashed_password: str
    isGoogleUser: bool
    createdAt: datetime
-   role: Role
-   imgUrl: str
+   avocat_image: str
    adress: str
+   role :str
    phoneNumber: str
    facebookUrl: str
    description: str
-   category: List[CategoryEnum]
+
+
