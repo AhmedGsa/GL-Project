@@ -6,6 +6,7 @@ from config.const_db import URL_DB
 
 engine = create_engine(URL_DB)
 Base = declarative_base()
+
 SessionLocal = sessionmaker(bind=engine, autoflush=False, autocommit=False)
 
 def get_db():

@@ -1,10 +1,11 @@
-from fastapi import APIRouter, Depends, status, HTTPException
+from fastapi import APIRouter, Depends, status, HTTPException, File, UploadFile, Form
 from config.db import get_db
 from sqlalchemy.orm import Session
-from schemas.auth import UserRegisterSchema, LoginSchema,AvocatRegisterSchema
-from repositories import admin,avocat , user
+from schemas.auth import UserRegisterSchema, LoginSchema
+from repositories import user
 from utils.jwt import JWT
 from utils.hashing import Hash
+from typing import Annotated
 
 router = APIRouter(prefix="/auth", tags=["Authentication"])
 
@@ -36,4 +37,3 @@ async def register_user(userRegisterSchema: UserRegisterSchema, db: Session = De
     newUser = user.create(db, userRegisterSchema)
     token = JWT.create_token({"id": newUser.id, "email": newUser.email})
     return {"token": token}
-
