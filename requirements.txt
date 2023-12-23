@@ -4,3 +4,4 @@ python-dotenv
 sqlalchemy
 passlib
 python-jose
+python-multipart

@@ -29,5 +29,6 @@ class Avocat(Base):
     description = Column(String(255))
     isValidated = Column(Boolean, default=False)
     categories = Column(JSON)
+    imageUrl = Column(String(255), nullable=True)
     userId = Column(Integer, ForeignKey("user.id"))
     user = relationship("User", back_populates="avocat")

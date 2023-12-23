@@ -6,14 +6,14 @@ from datetime import datetime
 
 
 def create(db: Session, avocatSchema: CreateAvocatSchema):
-    print(avocatSchema)
     avocat = Avocat(
         address=avocatSchema['address'],
         phoneNumber=avocatSchema['phoneNumber'],
         facebookUrl=avocatSchema['facebookUrl'],
         description=avocatSchema['description'],
         categories=avocatSchema['categories'],
-        userId=avocatSchema['userId']
+        userId=avocatSchema['userId'],
+        imageUrl=avocatSchema['imageUrl']
     )
     db.add(avocat)
     db.commit()
