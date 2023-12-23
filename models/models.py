@@ -1,6 +1,5 @@
 from config.db import Base
-from sqlalchemy import ForeignKey, String, Column, Integer, Boolean, DateTime, Enum, JSON
-from sqlalchemy.orm import relationship
+from sqlalchemy import String, Column, Integer, Boolean, DateTime, Enum
 import enum
 
 class Role(enum.Enum):
@@ -9,26 +8,23 @@ class Role(enum.Enum):
     avocat = "avocat"
 
 class User(Base):
-    __tablename__ = "user"
+    __tablename__ = "users"
     id = Column(Integer, primary_key=True, index=True)
-    nom = Column(String(255))
-    prenom = Column(String(255))
+    name = Column(String(255))
+    fname = Column(String(255))
     email = Column(String(255), unique=True)
     password = Column(String(255))
-    isGoogleUser = Column(Boolean, default=False)
-    createdAt = Column(DateTime)
-    role = Column(Enum(Role), default="user")
-    avocat = relationship("Avocat", back_populates="user")
+    created_at = Column(DateTime)
+    role =  Column(Enum(enumSTF.RoleEnum), nullable=False)
+    is_admin = Column(Boolean)
 
 class Avocat(Base):
-    __tablename__ = "avocat"
+    __tablename__ ="avocats"
     id = Column(Integer, primary_key=True, index=True)
-    address = Column(String(255))
-    phoneNumber = Column(String(255))
-    facebookUrl = Column(String(255))
-    description = Column(String(255))
-    isValidated = Column(Boolean, default=False)
-    categories = Column(JSON)
-    imageUrl = Column(String(255), nullable=True)
-    userId = Column(Integer, ForeignKey("user.id"))
-    user = relationship("User", back_populates="avocat")
+    name = Column(String(255))
+    fname = Column(String(255))
+    email = Column(String(255), unique=True)
+    password = Column(String(255))
+    is_validate = Column(Boolean, default=False)
+    createdAt = Column(DateTime)
+    role = Column(Enum(Role), default="user")
