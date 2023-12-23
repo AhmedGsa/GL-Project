@@ -14,7 +14,7 @@ class User(Base):
     nom = Column(String(255))
     prenom = Column(String(255))
     email = Column(String(255), unique=True)
-    password = Column(String(255))
+    password = Column(String(255), nullable=True)
     isGoogleUser = Column(Boolean, default=False)
     createdAt = Column(DateTime)
     role = Column(Enum(Role), default="user")

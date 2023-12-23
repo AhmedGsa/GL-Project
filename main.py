@@ -4,7 +4,7 @@ from config.db import engine
 from routers import auth
 
 app = FastAPI()
-models.Base.metadata.create_all(engine)
+models.Base.metadata.create_all(bind=engine)
 
 app.include_router(auth.router)
 

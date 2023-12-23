@@ -6,7 +6,11 @@ from datetime import datetime
 
 
 def create(db: Session, userSchema: UserRegisterSchema):
-    user = User(nom = userSchema.nom, prenom = userSchema.prenom, email = userSchema.email, password = Hash.bcrypt(userSchema.password), role = Role.user, createdAt = datetime.now())
+    if userSchema.password is None:
+        password = None
+    else:
+        password = Hash.bcrypt(userSchema.password)
+    user = User(nom = userSchema.nom, prenom = userSchema.prenom, email = userSchema.email, password = password, role = Role.user, createdAt = datetime.now())
     db.add(user)
     db.commit()
     db.refresh(user)
