@@ -6,6 +6,8 @@ from repositories import user, avocat
 from utils.jwt import JWT
 from utils.hashing import Hash
 from typing import Annotated
+from config.google import GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, GOOGLE_REDIRECT_URL
+import requests
 
 router = APIRouter(prefix="/auth", tags=["Authentication"])
 
@@ -17,6 +19,35 @@ def login(loginSchema: LoginSchema, db: Session = Depends(get_db)):
     if not Hash.compare(userExists.password, loginSchema.password):
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Incorrect password")
     token = JWT.create_token({"id": userExists.id, "email": userExists.email})
+    return {"token": token}
+
+@router.get("/login/google")
+async def login_google():
+    return {
+        "url": f"https://accounts.google.com/o/oauth2/auth?response_type=code&client_id={GOOGLE_CLIENT_ID}&redirect_uri={GOOGLE_REDIRECT_URL}&scope=openid%20profile%20email&access_type=offline"
+    }
+
+@router.get("/redirect")
+async def auth_google(code: str, db: Session = Depends(get_db)):
+    token_url = "https://accounts.google.com/o/oauth2/token"
+    data = {
+        "code": code,
+        "client_id": GOOGLE_CLIENT_ID,
+        "client_secret": GOOGLE_CLIENT_SECRET,
+        "redirect_uri": GOOGLE_REDIRECT_URL,
+        "grant_type": "authorization_code",
+    }
+    response = requests.post(token_url, data=data)
+    access_token = response.json().get("access_token")
+    user_info = requests.get("https://www.googleapis.com/oauth2/v1/userinfo", headers={"Authorization": f"Bearer {access_token}"})
+    user_info = user_info.json()
+    # create user if not exists
+    userExists = user.get_by_email(db, user_info["email"])
+    if not userExists:
+        newUser = user.create(db, UserRegisterSchema(email=user_info["email"], nom=user_info["family_name"], prenom=user_info["given_name"]))
+        token = JWT.create_token({"id": newUser.id, "email": newUser.email, "role": f"{newUser.role}"})
+        return {"token": token}
+    token = JWT.create_token({"id": userExists.id, "email": userExists.email, "role": f"{userExists.role}"})
     return {"token": token}
 
 @router.post("/register-user")

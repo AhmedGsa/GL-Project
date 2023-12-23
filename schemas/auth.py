@@ -6,7 +6,9 @@ class LoginSchema(BaseModel):
     email: str
     password: str
 
-class UserRegisterSchema(LoginSchema):
+class UserRegisterSchema(BaseModel):
+    email: str
+    password: str | None = None
     nom: str
     prenom: str
 
