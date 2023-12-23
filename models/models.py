@@ -1,5 +1,6 @@
 from config.db import Base
-from sqlalchemy import String, Column, Integer, Boolean, DateTime, Enum
+from sqlalchemy import ForeignKey, String, Column, Integer, Boolean, DateTime, Enum, JSON
+from sqlalchemy.orm import relationship
 import enum
 
 class Role(enum.Enum):
@@ -17,3 +18,17 @@ class User(Base):
     isGoogleUser = Column(Boolean, default=False)
     createdAt = Column(DateTime)
     role = Column(Enum(Role), default="user")
+    avocat = relationship("Avocat", back_populates="user")
+
+class Avocat(Base):
+    __tablename__ = "avocat"
+    id = Column(Integer, primary_key=True, index=True)
+    address = Column(String(255))
+    phoneNumber = Column(String(255))
+    facebookUrl = Column(String(255))
+    description = Column(String(255))
+    isValidated = Column(Boolean, default=False)
+    categories = Column(JSON)
+    imageUrl = Column(String(255), nullable=True)
+    userId = Column(Integer, ForeignKey("user.id"))
+    user = relationship("User", back_populates="avocat")
