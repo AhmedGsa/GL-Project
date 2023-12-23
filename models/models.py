@@ -8,6 +8,11 @@ class Role(enum.Enum):
     admin = "admin"
     avocat = "avocat"
 
+class AvocatStatus(enum.Enum):
+    pending = "pending"
+    accepted = "accepted"
+    rejected = "rejected"
+
 class User(Base):
     __tablename__ = "user"
     id = Column(Integer, primary_key=True, index=True)
@@ -27,7 +32,8 @@ class Avocat(Base):
     phoneNumber = Column(String(255))
     facebookUrl = Column(String(255))
     description = Column(String(255))
-    isValidated = Column(Boolean, default=False)
+    status = Column(Enum(AvocatStatus), default="pending")
+    isBlocked = Column(Boolean, default=False)
     categories = Column(JSON)
     imageUrl = Column(String(255), nullable=True)
     userId = Column(Integer, ForeignKey("user.id"))
