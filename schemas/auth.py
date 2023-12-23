@@ -8,9 +8,12 @@ class LoginSchema(BaseModel):
     password: str
 
 class UserRegisterSchema(LoginSchema):
-    nom: str
-    prenom: str
+    name: str
+    fname: str
     email:str
+    password:str
+    
+
 
 # class AvocatRegisterSchema(UserRegisterSchema):
 #     facebookURL : str

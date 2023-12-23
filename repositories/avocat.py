@@ -6,7 +6,7 @@ from utils.hashing import Hash
 
 
 def Avocatcreate(request :avocat.AvocatSchema,db: Session):
-    new_avocat = models.Avocat(nom= request.nom,prenom = request.prenom,email = request.email,password = Hash.bcrypt(request.hashed_password),createdAt=request.createdAt,role = "avocat",adress =request.adress,phoneNumber = request.phoneNumber,facebookUrl = request.facebookUrl,description = request.description)
+    new_avocat = models.Avocat(name= request.name,fname = request.fname,email = request.email,password = Hash.bcrypt(request.password),createdAt=request.createdAt,role = "Avocat",adress =request.adress,is_validate=False,phoneNumber = request.phoneNumber,facebookUrl = request.facebookUrl,description = request.description)
     db.add(new_avocat)
     db.commit()
     db.refresh(new_avocat)

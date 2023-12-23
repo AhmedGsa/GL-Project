@@ -9,19 +9,19 @@ from utils.hashing import Hash
 # from datetime import datetimedef 
 
 def create(request  :admin.AdminSchema ,db :Session):
-    new_admin = models.Admin(nom =request.nom,prenom=request.prenom, email=request.email,password = Hash.bcrypt(request.hashed_password),createdAt=request.created_at,role ='Admin')#refer to the db mosule Structure
+    new_admin = models.User(name =request.name,fname=request.fname, email=request.email,password = Hash.bcrypt(request.hashed_password),created_at=request.created_at,role ='Admin',is_admin=True)#refer to the db mosule Structure
     db.add(new_admin)   
     db.commit()
     db.refresh(new_admin)
     return new_admin
 
 def destry(id ,db :Session ):
-    db.query(models.Admin).filter(models.Admin.id == id).delete(synchronize_session=False)
+    db.query(models.User).filter(models.User.id == id).delete(synchronize_session=False)
     db.commit()
     return {'Admin deleted Successfuly'}
 
 def update(id ,request :admin.AdminSchema ,db :Session):
-    admin = db.query(models.Admin).filter(models.Admin.id == id).first()
+    admin = db.query(models.User).filter(models.User.id == id).first()
     if not admin:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND ,Detail =f'the Admin with id = {id} is not available')
     
@@ -35,16 +35,16 @@ def update(id ,request :admin.AdminSchema ,db :Session):
 #     return admins
 
 def getById(id,db :Session):
-    result = db.query(models.Admin).filter(models.Admin.id == id).first()
+    result = db.query(models.User).filter(models.User.id == id).first()
     if not result : 
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,Detail =f'Admin with this id = {id} is not available')
     return result
 
 
 # getAll Avo:
-def getAll(db :Session):
-    admins = db.query(models.Admin).all()
-    return admins
+def getAllavos(db :Session):
+    avocats = db.query(models.Avocat).all()
+    return avocats
 
 
 def get_Avocat_by_email(db: Session, email: str):

@@ -27,25 +27,25 @@ async def getById(id :int ,db :Session = Depends(get_db)):
     return admin.getById(id,db)
 
 #Avocat-Admin interaction :
-@router.get('/ALawyers',response_model= List[ShowAvocatList])
-async def getAll(db :Session = Depends(get_db)):
+@router.get('/Aavocats',response_model= List[ShowAvocatList])
+async def getAllavos(db :Session = Depends(get_db)):
     return admin.getAll(db);
 
 
-@router.get('/lawyers/{avocat_email}',response_model= ShowAvocat)
+@router.get('/avocats/{avocat_email}',response_model= ShowAvocat)
 async def get_Avocat(avocat_email :str ,db :Session = Depends(get_db),):
     return admin.get_Avocat_by_email(db,avocat_email);
 
 
-@router.get('/NVlawyers',response_model= List[ShowAvocatList])
+@router.get('/NVavocats',response_model= List[ShowAvocatList])
 async def get_NVAvocat(db :Session = Depends(get_db)):
     return admin.get_Non_validate_Avos(db);
-@router.get('/Vlawyers',response_model= List[ShowAvocatList])
+@router.get('/Vavocats',response_model= List[ShowAvocatList])
 async def get_VAvocat(db :Session = Depends(get_db)):
     return admin.get_validate_Avos(db);
 
 
-@router.put("/lawyer/{avocat_email}/validate")
+@router.put("/avocats/{avocat_email}/validate")
 async def validate_lawyer(avocat_email: str,db :Session = Depends(get_db)):
     return admin.validate(db,avocat_email)
    # Validate the lawyer profile here
