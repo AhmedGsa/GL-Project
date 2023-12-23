@@ -25,3 +25,5 @@ class CreateAvocatSchema(BaseModel):
     categories: list[str] = []
     userId: int
     imageUrl: str
+
+    

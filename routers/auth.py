@@ -47,3 +47,4 @@ def register_avocat(image: UploadFile, address: Annotated[str, Form()], phoneNum
     avocat.create(db, {"userId": newUser.id, **avocatRegisterSchema.model_dump(), "imageUrl": f"http://localhost:8000/avocat/image/{newUser.id}.{fileExt}"})
     token = JWT.create_token({"id": newUser.id, "email": newUser.email})
     return {"token": token}
+
