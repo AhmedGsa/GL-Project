@@ -8,6 +8,7 @@ from datetime import datetime
 def create(db: Session, avocatSchema: CreateAvocatSchema):
     avocat = Avocat(
         address=avocatSchema['address'],
+        wilaya=avocatSchema['wilaya'],
         phoneNumber=avocatSchema['phoneNumber'],
         facebookUrl=avocatSchema['facebookUrl'],
         description=avocatSchema['description'],

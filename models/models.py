@@ -29,6 +29,7 @@ class Avocat(Base):
     __tablename__ = "avocat"
     id = Column(Integer, primary_key=True, index=True)
     address = Column(String(255))
+    wilaya = Column(String(50))
     phoneNumber = Column(String(255))
     facebookUrl = Column(String(255))
     description = Column(String(255))
