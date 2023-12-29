@@ -23,10 +23,10 @@ def rateAvocat(rateSchema: RateSchema,db:Session):
     #Update Avocat rating
 
 def caluclateAvocatRate(avocatId:int,db:Session):
-    (rounded_avgrating,) = db.query(func.round(func.avg(Rating.rate) * 2) / 2).filter(Rating.avocatId == avocatId).first()
-    db.query(Avocat).filter(Avocat.id == avocatId).update({'rate': rounded_avgrating})
+    (roundedavgrating,) = db.query(func.round(func.avg(Rating.rate) * 2) / 2).filter(Rating.avocatId == avocatId).first()
+    db.query(Avocat).filter(Avocat.id == avocatId).update({'rate': roundedavgrating})
     db.commit()
-    return rounded_avgrating
+    return roundedavgrating
 
 def aleadyRated(avocatId:int,userId:int,db:Session):
     if db.query(Rating).filter(Rating.avocatId == avocatId).filter(Rating.userId == userId).first():
