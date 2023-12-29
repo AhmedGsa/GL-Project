@@ -1,3 +1,4 @@
+from fastapi import HTTPException, status
 from sqlalchemy.orm import Session
 from models.models import Appointment, Availability
 from schemas.appointment import CreateAppointmentSchema, GetAvailableAppointmentTimesSchema
@@ -7,6 +8,9 @@ def get_all(db: Session):
     return availabilites
 
 def create(db: Session, createAppointmentSchema: CreateAppointmentSchema, userId: int):
+    isAvailable = db.query(Appointment).filter(Appointment.availabilityId == createAppointmentSchema.availabilityId, Appointment.date == createAppointmentSchema.date).first()
+    if isAvailable:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Appointment is booked")
     newAppointment = Appointment(userId=userId, **createAppointmentSchema.model_dump())
     db.add(newAppointment)
     db.commit()
