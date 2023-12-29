@@ -20,3 +20,7 @@ def create(db: Session, avocatSchema: CreateAvocatSchema):
     db.commit()
     db.refresh(avocat)
     return avocat
+
+def get_by_id(db: Session, id: int):
+    avocat = db.query(Avocat).filter(Avocat.id == id).first()
+    return avocat
