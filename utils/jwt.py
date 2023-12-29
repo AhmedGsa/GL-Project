@@ -27,7 +27,7 @@ class JWT():
             headers={"WWW-Authenticate": "Bearer"},
         )
         try:
-            payload = jwt.decode(token.credentials, SECRET_KEY, ALGORITHM)
+            payload = jwt.decode(token, SECRET_KEY, ALGORITHM)
         except JWTError:
             raise credentials_exception
         return payload
