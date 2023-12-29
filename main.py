@@ -1,7 +1,7 @@
 from fastapi import FastAPI, HTTPException, Request, status
 from models import models
 from config.db import engine
-from routers import auth, search, appointment,rating
+from routers import auth, search, appointment, rating, availabilities
 from utils.jwt import JWT
 
 app = FastAPI()
@@ -11,6 +11,7 @@ app.include_router(auth.router)
 app.include_router(search.router)
 app.include_router(rating.router)
 app.include_router(appointment.router)
+app.include_router(availabilities.router)
 
 @app.middleware("http")
 async def auth_middleware(request: Request, call_next):
