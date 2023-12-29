@@ -1,5 +1,5 @@
 from config.db import Base
-from sqlalchemy import ForeignKey, String, Column, Integer, Boolean, DateTime, Enum, JSON
+from sqlalchemy import ForeignKey, String, Column, Integer, Boolean, DateTime,Float, Enum, JSON
 from sqlalchemy.orm import relationship
 import enum
 
@@ -24,6 +24,7 @@ class User(Base):
     createdAt = Column(DateTime)
     role = Column(Enum(Role), default="user")
     avocat = relationship("Avocat", back_populates="user")
+    rating = relationship("Rating", back_populates="user")
 
 class Avocat(Base):
     __tablename__ = "avocat"
@@ -36,6 +37,26 @@ class Avocat(Base):
     status = Column(Enum(AvocatStatus), default="pending")
     isBlocked = Column(Boolean, default=False)
     categories = Column(JSON)
+    rate = Column(Float, default=0)
     imageUrl = Column(String(255), nullable=True)
     userId = Column(Integer, ForeignKey("user.id"))
     user = relationship("User", back_populates="avocat")
+    rating = relationship("Rating", back_populates="avocat")
+    
+class Rating(Base):
+    __tablename__ = "rating"
+    id = Column(Integer, primary_key=True, index=True)
+    userId = Column(Integer, ForeignKey("user.id"))
+    avocatId = Column(Integer, ForeignKey("avocat.id"))
+    rate = Column(Float)
+    createdAt = Column(DateTime)
+    avocat = relationship("Avocat", back_populates="rating")
+    user = relationship("User", back_populates="rating")
+    comment = relationship("Comment", back_populates="rating")
+    
+class Comment(Base):
+    __tablename__ = "comment"
+    id = Column(Integer, primary_key=True, index=True)
+    ratingid = Column(Integer, ForeignKey("rating.id"))
+    comment = Column(String(255))
+    rating = relationship("Rating", back_populates="comment")
