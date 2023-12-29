@@ -8,5 +8,5 @@ router = APIRouter(prefix="/appointment", tags=["Appointment"])
 bearer_scheme = HTTPBearer()
 
 @router.post("/create")
-def create_appointment(token: str = Depends(bearer_scheme)):
+def create_appointment(token: str = Depends(bearer_scheme), db = Depends(get_db)):
     return {"message": "appointment created"}
