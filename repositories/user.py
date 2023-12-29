@@ -26,3 +26,7 @@ def create_avocat(db: Session, userSchema: UserRegisterSchema):
 def get_by_email(db: Session, email: str):
     user = db.query(User).filter(User.email == email).first()
     return user
+
+def get_by_id(db: Session, id: int):
+    user = db.query(User).filter(User.id == id).first()
+    return user
