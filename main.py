@@ -20,7 +20,6 @@ async def auth_middleware(request: Request, call_next):
         return response
     token = request.headers.get("Authorization")
     token = token.split(" ")[1] if token else None
-    print(token)
     if token:
         try:
             payload = JWT.verify_token(token)

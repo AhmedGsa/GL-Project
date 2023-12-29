@@ -1,5 +1,5 @@
 from config.db import Base
-from sqlalchemy import ForeignKey, String, Column, Integer, Boolean, DateTime,Float, Enum, JSON
+from sqlalchemy import ForeignKey, String, Column, Integer, Boolean, DateTime, Float, Enum, JSON, Date
 from sqlalchemy.orm import relationship
 import enum
 
@@ -12,6 +12,11 @@ class AvocatStatus(enum.Enum):
     pending = "pending"
     accepted = "accepted"
     rejected = "rejected"
+
+class AppointmentStatus(enum.Enum):
+    pending = "pending"
+    done = "done"
+    canceled = "canceled"
 
 class User(Base):
     __tablename__ = "user"
@@ -83,8 +88,10 @@ class AvailabilityAvocat(Base):
 class Appointment(Base):
     __tablename__ = "appointment"
     id = Column(Integer, primary_key=True, index=True)
-    start = Column(String(255))
-    end = Column(String(255))
+    date = Column(Date)
+    status = Column(Enum(AppointmentStatus), default="pending")
+    phoneNumber = Column(String(255))
+    description = Column(String(255))
     avocatId = Column(Integer, ForeignKey("avocat.id"))
     avocat = relationship("Avocat", back_populates="appointments")
     userId = Column(Integer, ForeignKey("user.id"))
