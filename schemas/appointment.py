@@ -6,4 +6,7 @@ class CreateAppointmentSchema(BaseModel):
     avocatId: int
     availabilityId: int
     date: str
-    
+
+class GetAvailableAppointmentTimesSchema(BaseModel):
+    avocatId: int
+    date: str
