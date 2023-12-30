@@ -10,6 +10,7 @@ def create(db: Session, avocatSchema: CreateAvocatSchema):
         address=avocatSchema['address'],
         phoneNumber=avocatSchema['phoneNumber'],
         facebookUrl=avocatSchema['facebookUrl'],
+        Wilaya = avocatSchema['Wilaya'],
         description=avocatSchema['description'],
         categories=avocatSchema['categories'],
         userId=avocatSchema['userId'],

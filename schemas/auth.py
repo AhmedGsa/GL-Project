@@ -16,6 +16,7 @@ class AvocatRegisterSchema(UserRegisterSchema):
     address: str
     phoneNumber: str
     facebookUrl: str
+    Wilaya :str
     description: str
     categories: list[str] = []
 
@@ -23,6 +24,7 @@ class CreateAvocatSchema(BaseModel):
     address: str
     phoneNumber: str
     facebookUrl: str
+    Wilaya :str
     description: str
     categories: list[str] = []
     userId: int
