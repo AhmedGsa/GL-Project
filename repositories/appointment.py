@@ -1,7 +1,7 @@
 from fastapi import HTTPException, status
 from sqlalchemy.orm import Session
-from models.models import Appointment, Availability
-from schemas.appointment import CreateAppointmentSchema, GetAvailableAppointmentTimesSchema
+from models.models import Appointment, Availability, AppointmentStatus, User
+from schemas.appointment import CreateAppointmentSchema
 
 def get_all(db: Session):
     availabilites = db.query(Appointment).all()
@@ -21,3 +21,16 @@ def get_available_times(db: Session, avocatId: int, date: str):
     bookedAppointments = db.query(Appointment).filter(Appointment.avocatId == avocatId, Appointment.date == date).all()
     availabilities = db.query(Availability).filter(Availability.id.not_in([appointment.availabilityId for appointment in bookedAppointments])).all()
     return availabilities
+
+def get_avocat_appointments(db: Session, avocatId: int):
+    appointments = db.query(Appointment, User).select_from(Appointment).join(User).filter(Appointment.avocatId == avocatId, Appointment.status == AppointmentStatus.pending).all()
+    print(appointments)
+    return [{
+        "id": appointment.id,
+        "date": appointment.date,
+        "status": appointment.status,
+        "phoneNumber": appointment.phoneNumber,
+        "description": appointment.description,
+        "userNom": user.nom,
+        "userPrenom": user.prenom,
+    } for appointment, user in appointments]

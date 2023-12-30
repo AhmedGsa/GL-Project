@@ -17,3 +17,7 @@ def create_appointment(request: Request, createAppointmentSchema: CreateAppointm
 @router.get("/available-times")
 def get_available_times(avocatId: int, date: str, db = Depends(get_db)):
     return appointment.get_available_times(db, avocatId, date)
+
+@router.get("/avocat-appointments")
+def get_avocat_appointments(request: Request, db = Depends(get_db), token: str = Depends(bearer_scheme)):
+    return appointment.get_avocat_appointments(db, request.state.user["id"])
