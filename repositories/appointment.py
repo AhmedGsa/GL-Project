@@ -23,7 +23,7 @@ def get_available_times(db: Session, avocatId: int, date: str):
     return availabilities
 
 def get_avocat_appointments(db: Session, avocatId: int):
-    appointments = db.query(Appointment, User).select_from(Appointment).join(User).filter(Appointment.avocatId == avocatId, Appointment.status == AppointmentStatus.pending).all()
+    appointments = db.query(Appointment, User, Availability).select_from(Appointment).join(User).join(Availability).filter(Appointment.avocatId == avocatId, Appointment.status == AppointmentStatus.pending).all()
     print(appointments)
     return [{
         "id": appointment.id,
@@ -33,4 +33,6 @@ def get_avocat_appointments(db: Session, avocatId: int):
         "description": appointment.description,
         "userNom": user.nom,
         "userPrenom": user.prenom,
-    } for appointment, user in appointments]
+        "start": availability.start,
+        "end": availability.end
+    } for appointment, user, availability in appointments]
