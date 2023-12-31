@@ -1,4 +1,5 @@
 from fastapi import FastAPI, HTTPException, Request, status
+from fastapi.middleware.cors import CORSMiddleware
 from models import models
 from config.db import engine
 from routers import auth, search, appointment, rating, availabilities
@@ -6,6 +7,18 @@ from utils.jwt import JWT
 
 app = FastAPI()
 models.Base.metadata.create_all(bind=engine)
+
+origins = [
+    "http://127.0.0.1:5500",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["POST", "GET", "PUT", "DELETE"],
+    allow_headers=["*"],
+)
 
 app.include_router(auth.router)
 app.include_router(search.router)
