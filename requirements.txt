@@ -1,5 +1,6 @@
 fastapi
 PyMySql
+<<<<<<< HEAD
 python-dotenv
 sqlalchemy
 passlib
@@ -7,3 +8,6 @@ python-jose
 python-multipart
 requests
 pagination
+=======
+python-dotenv
+>>>>>>> 6250e986c6ef6d3ad65d9785931b30b009744930

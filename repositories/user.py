@@ -1,16 +1,20 @@
 from sqlalchemy.orm import Session
-from models.models import User, Role
+from models.models import User
 from schemas.auth import UserRegisterSchema
 from utils.hashing import Hash
 from datetime import datetime
 
 
 def create(db: Session, userSchema: UserRegisterSchema):
+<<<<<<< HEAD
     if userSchema.password is None:
         password = None
     else:
         password = Hash.bcrypt(userSchema.password)
     user = User(nom = userSchema.nom, prenom = userSchema.prenom, email = userSchema.email, password = password, role = Role.user, createdAt = datetime.now())
+=======
+    user = User(name = userSchema.name, fname = userSchema.fname, email = userSchema.email, password = Hash.bcrypt(userSchema.password), role = 'User', createdAt = datetime.now(),is_admi =False)
+>>>>>>> 6250e986c6ef6d3ad65d9785931b30b009744930
     db.add(user)
     db.commit()
     db.refresh(user)

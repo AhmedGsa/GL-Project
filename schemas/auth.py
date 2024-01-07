@@ -1,6 +1,5 @@
+from datetime import datetime
 from pydantic import BaseModel
-from fastapi import UploadFile, File
-from typing import Annotated
 
 class LoginSchema(BaseModel):
     email: str

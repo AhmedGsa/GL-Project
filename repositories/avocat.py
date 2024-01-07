@@ -1,3 +1,4 @@
+
 from sqlalchemy.orm import Session
 from models.models import Avocat
 from schemas.auth import CreateAvocatSchema
@@ -20,3 +21,4 @@ def create(db: Session, avocatSchema: CreateAvocatSchema):
     db.commit()
     db.refresh(avocat)
     return avocat
+
