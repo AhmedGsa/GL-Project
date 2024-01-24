@@ -1,3 +1,4 @@
+from datetime import datetime
 from pydantic import BaseModel
 
 class LoginSchema(BaseModel):
@@ -15,6 +16,7 @@ class AvocatRegisterSchema(UserRegisterSchema):
     wilaya:str
     phoneNumber: str
     facebookUrl: str
+    Wilaya :str
     description: str
     categories: list[str] = []
 
@@ -23,6 +25,7 @@ class CreateAvocatSchema(BaseModel):
     wilaya:str
     phoneNumber: str
     facebookUrl: str
+    Wilaya :str
     description: str
     categories: list[str] = []
     userId: int
