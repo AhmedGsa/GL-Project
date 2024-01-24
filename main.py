@@ -1,9 +1,16 @@
 from fastapi import FastAPI, HTTPException, Request, status
 from fastapi.middleware.cors import CORSMiddleware
 from models import models
+
 from config.db import engine
 from routers import auth, search, appointment, rating, availabilities
 from utils.jwt import JWT
+from routers import auth,admin
+import json
+from config.db import engine
+from routers import auth,admin
+from models import models
+from routers import auth,admin,avocat
 
 app = FastAPI()
 models.Base.metadata.create_all(bind=engine)
@@ -41,7 +48,6 @@ async def auth_middleware(request: Request, call_next):
             raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid email or password")
     response = await call_next(request)
     return response
+app.include_router(admin.router)
+app.include_router(avocat.router)
 
-@app.get("/")
-def read_root():
-    return {"Hello": "chihab"}
