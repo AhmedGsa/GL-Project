@@ -9,10 +9,9 @@ from datetime import datetime
 def create(db: Session, avocatSchema: CreateAvocatSchema):
     avocat = Avocat(
         address=avocatSchema['address'],
-        wilaya=avocatSchema['wilaya'],
+        wilaya=avocatSchema['Wilaya'],
         phoneNumber=avocatSchema['phoneNumber'],
         facebookUrl=avocatSchema['facebookUrl'],
-        Wilaya = avocatSchema['Wilaya'],
         description=avocatSchema['description'],
         categories=avocatSchema['categories'],
         userId=avocatSchema['userId'],

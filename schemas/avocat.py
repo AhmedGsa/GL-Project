@@ -19,4 +19,3 @@ class AvocatSchema(BaseModel):
    facebookUrl : str
    description :str
    categories :Optional[enumSTF.AvocateCategoryEnum] = None 
-

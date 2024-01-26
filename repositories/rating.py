@@ -1,13 +1,15 @@
 import datetime
+from sqlalchemy import desc
 from sqlalchemy.orm import Session
 from models.models import Avocat, Comment, Rating, User
 from sqlalchemy.sql import func
+from repositories.search import AvocatSearchResult
 from schemas.rate import RateSchema
 from datetime import datetime
 
-def rateAvocat(rateSchema: RateSchema,db:Session):
+def rateAvocat(rateSchema: RateSchema,userId:int,db:Session):
     #add the rate and comment to the rating table
-    rate = Rating(rate=rateSchema.rate,avocatId=rateSchema.avocatId,userId=rateSchema.userId,createdAt=datetime.now())
+    rate = Rating(rate=rateSchema.rate,userId = userId,avocatId=rateSchema.avocatId,createdAt=datetime.now())
     db.add(rate)
     db.commit()
     db.refresh(rate)
@@ -55,3 +57,40 @@ def getAvocatRatingsAndComments(avocatId:int,db:Session):
         for result in results
     ]
     return avocat_ratings_and_comments
+
+
+def getTopRated(limit:int , db:Session):
+    mostRated = (
+        db.query(User, Avocat)
+        .join(Avocat)
+    )
+    #filter by status and isBlocked
+    mostRated = mostRated.filter(Avocat.status == "accepted").filter(Avocat.isBlocked == False)
+    
+    #order by rating and limit
+    mostRated = mostRated.order_by(desc(Avocat.rate)).limit(limit).all()
+
+    if mostRated:
+        
+        avocat_Most_Rated = [
+            AvocatSearchResult(
+                id=user_instance.id,
+                avocatId = avocat_instance.id,
+                nom=user_instance.nom,
+                prenom=user_instance.prenom,
+                email=user_instance.email,
+                createdAt=user_instance.createdAt,
+                address=avocat_instance.address,
+                wilaya=avocat_instance.wilaya,
+                phoneNumber=avocat_instance.phoneNumber,
+                facebookUrl=avocat_instance.facebookUrl,
+                description=avocat_instance.description,
+                categories=avocat_instance.categories,
+                rate=avocat_instance.rate,
+                imageUrl=avocat_instance.imageUrl
+            )
+            for user_instance, avocat_instance in mostRated
+        ]
+        return avocat_Most_Rated
+    else:
+        return None
