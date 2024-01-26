@@ -6,3 +6,6 @@ sqlalchemy
 passlib
 python-jose
 python-multipart
+requests
+bcrypt
+mysql-connector-python

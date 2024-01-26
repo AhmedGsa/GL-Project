@@ -1,5 +1,5 @@
 from config.db import Base
-from sqlalchemy import ForeignKey, String, Column, Integer, Boolean, DateTime, Float, Enum, JSON, Date
+from sqlalchemy import ForeignKey, String, Column, Integer, Boolean, DateTime, Float, Enum, JSON, Date, Text
 from sqlalchemy.orm import relationship
 import enum
 from config.const_db import URL_DB
@@ -48,7 +48,7 @@ class Avocat(Base):
     wilaya = Column(String(50))
     phoneNumber = Column(String(255))
     facebookUrl = Column(String(255))
-    description = Column(String(255))
+    description = Column(Text)
     status = Column(Enum(AvocatStatus), default="pending")
     isBlocked = Column(Boolean, default=False)
     categories = Column(JSON)
