@@ -51,7 +51,7 @@ def getAvocatRatingsAndComments(avocatId:int,db:Session):
         AvocatRatingsAndCommentsResult(
             userName=result.Rating.user.nom + " " + result.Rating.user.prenom,
             rate=result.Rating.rate,
-            comment=result.Comment.comment,
+            comment=result.Comment,
             createdAt=result.Rating.createdAt.strftime("%B %d, %Y"),
         )
         for result in results
@@ -94,3 +94,22 @@ def getTopRated(limit:int , db:Session):
         return avocat_Most_Rated
     else:
         return None
+    
+def getUserRatings(userId:int,db:Session):
+    results = db.query(Rating,Comment).join(Comment).filter(Rating.userId == userId).filter(Rating.id == Comment.ratingid).all()
+    
+    user_ratings_and_comments = [
+        AvocatRatingsAndCommentsResult(
+            userName=result.Rating.user.nom + " " + result.Rating.user.prenom,
+            rate=result.Rating.rate,
+            comment=result.Comment.comment,
+            createdAt=result.Rating.createdAt.strftime("%B %d, %Y"),
+        )
+        for result in results
+    ]
+    if(user_ratings_and_comments):
+        return user_ratings_and_comments
+    else:
+        return None  
+
+  

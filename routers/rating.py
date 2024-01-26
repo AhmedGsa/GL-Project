@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, Request,status
 from fastapi.security import HTTPBearer
 from sqlalchemy.orm import Session
 from config.db import get_db
-from repositories.rating import aleadyRated, getTopRated, rateAvocat,getAvocatRatingsAndComments
+from repositories.rating import aleadyRated, getTopRated, getUserRatings, rateAvocat,getAvocatRatingsAndComments
 from schemas.rate import RateSchema
 from repositories import avocat,user
 
@@ -57,3 +57,7 @@ def canRate(avocatid : int,userid : int,db:Session=Depends(get_db)):
 def topRated(limit:int,db:Session=Depends(get_db)):
     topRatedAvocats = getTopRated(limit,db)
     return topRatedAvocats
+
+@router.get("/user-ratings")
+def userRatings(request:Request, token: str = Depends(bearer_scheme),db:Session=Depends(get_db)):
+    return getUserRatings(request.state.user["id"],db)
