@@ -19,6 +19,8 @@ class AvocatRegisterSchema(UserRegisterSchema):
     longitude: float
     latitude: float
     categories: list[str] = []
+    workDays: list[str] = []
+    availabilityIds: list[str] = []
 
 class CreateAvocatSchema(BaseModel):
     address: str
@@ -29,5 +31,7 @@ class CreateAvocatSchema(BaseModel):
     longitude: float
     latitude: float
     categories: list[str] = []
+    workDays: list[str] = []
+    availabilityIds: list[str] = []
     userId: int
     imageUrl: str

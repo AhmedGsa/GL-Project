@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Session
-from models.models import Avocat
+from models.models import Avocat, AvailabilityAvocat
 from schemas.auth import CreateAvocatSchema
 from utils.hashing import Hash
 from datetime import datetime
@@ -16,9 +16,15 @@ def create(db: Session, avocatSchema: CreateAvocatSchema):
         longitude=avocatSchema['longitude'],
         latitude=avocatSchema['latitude'],
         userId=avocatSchema['userId'],
-        imageUrl=avocatSchema['imageUrl']
+        imageUrl=avocatSchema['imageUrl'],
+        workDays=avocatSchema['workDays'],
     )
     db.add(avocat)
+    db.commit()
+    db.refresh(avocat)
+    print(avocatSchema['availabilityIds'])
+    for availabilityId in avocatSchema['availabilityIds']:
+        db.add(AvailabilityAvocat(availabilityId=availabilityId, avocatId=avocat.id))
     db.commit()
     db.refresh(avocat)
     return avocat

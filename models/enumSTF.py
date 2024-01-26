@@ -5,8 +5,6 @@ class RoleEnum(str,Enum):
   admin = "Admin"
   user = "User"
 
-from enum import Enum
-
 class AvocateCategoryEnum(str, Enum):
   ARTISAN_COMMECA = "Artisan-commerçant"
   COMMERCANT = "Commerçant"
