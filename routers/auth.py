@@ -1,13 +1,18 @@
-from fastapi import APIRouter, Depends, status, HTTPException, File, UploadFile, Form
+from fastapi import APIRouter, Depends, status, HTTPException, File, UploadFile, Form, Request
+from fastapi.responses import RedirectResponse
+from fastapi.security import HTTPBearer
 from config.db import get_db
 from sqlalchemy.orm import Session
 from schemas.auth import UserRegisterSchema, LoginSchema, AvocatRegisterSchema
 from repositories import user, avocat
+from models.models import Role
 from utils.jwt import JWT
 from utils.hashing import Hash
 from typing import Annotated
 from config.google import GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, GOOGLE_REDIRECT_URL
 import requests
+
+bearer_scheme = HTTPBearer()
 
 router = APIRouter(prefix="/auth", tags=["Authentication"])
 
@@ -48,7 +53,7 @@ async def auth_google(code: str, db: Session = Depends(get_db)):
         token = JWT.create_token({"id": newUser.id, "email": newUser.email, "role": f"{newUser.role}"})
         return {"token": token}
     token = JWT.create_token({"id": userExists.id, "email": userExists.email, "role": f"{userExists.role}"})
-    return {"token": token}
+    return RedirectResponse(f"http://localhost:5173/login?token={token}")
 
 @router.post("/register-user")
 def register_user(userRegisterSchema: UserRegisterSchema, db: Session = Depends(get_db)):
@@ -60,8 +65,8 @@ def register_user(userRegisterSchema: UserRegisterSchema, db: Session = Depends(
     return {"token": token}
 
 @router.post("/register-avocat")
-def register_avocat(image: UploadFile, address: Annotated[str, Form()],wilaya:Annotated[str, Form()], phoneNumber: Annotated[str, Form()], facebookUrl: Annotated[str, Form()], description: Annotated[str, Form()], categories: Annotated[list[str], Form()], email: Annotated[str, Form()], password: Annotated[str, Form()], nom: Annotated[str, Form()], prenom: Annotated[str, Form()], db: Session = Depends(get_db)):
-    avocatRegisterSchema = AvocatRegisterSchema(email=email, password=password, nom=nom, prenom=prenom, address=address,Wilaya = wilaya, phoneNumber=phoneNumber, facebookUrl=facebookUrl, description=description, categories=categories)
+def register_avocat(image: UploadFile, address: Annotated[str, Form()],wilaya:Annotated[str, Form()], phoneNumber: Annotated[str, Form()], facebookUrl: Annotated[str, Form()], description: Annotated[str, Form()], categories: Annotated[str, Form()], workDays: Annotated[str, Form()], availabilityIds: Annotated[str, Form()], email: Annotated[str, Form()], password: Annotated[str, Form()], nom: Annotated[str, Form()], prenom: Annotated[str, Form()], longitude: Annotated[str, Form()], latitude: Annotated[str, Form()], db: Session = Depends(get_db)):
+    avocatRegisterSchema = AvocatRegisterSchema(email=email, password=password, nom=nom, prenom=prenom, address=address,wilaya = wilaya, phoneNumber=phoneNumber, facebookUrl=facebookUrl, description=description, categories=categories.split(","),longitude=float(longitude), latitude=float(latitude), workDays=workDays.split(","), availabilityIds=availabilityIds.split(","))
     userExists = user.get_by_email(db, avocatRegisterSchema.email)
     if userExists:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Email already used")
@@ -78,3 +83,28 @@ def register_avocat(image: UploadFile, address: Annotated[str, Form()],wilaya:An
     avocat.create(db, {"userId": newUser.id, **avocatRegisterSchema.model_dump(), "imageUrl": f"http://localhost:8000/avocat/image/{newUser.id}.{fileExt}"})
     token = JWT.create_token({"id": newUser.id, "email": newUser.email})
     return {"token": token}
+
+@router.get("/me")
+def get_me(request: Request, db: Session = Depends(get_db), token: str = Depends(bearer_scheme)):
+    userId = request.state.user["id"]
+    userExists = user.get_by_id(db, userId)
+    if not userExists:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
+    print(userExists.role)
+    if userExists.role == Role.avocat:
+        avocatExists = avocat.get_by_user_id(db, userId)
+        return {
+            "id": userExists.id,
+            "nom": userExists.nom,
+            "prenom": userExists.prenom,
+            "email": userExists.email,
+            "role": userExists.role,
+            "imageUrl": avocatExists.imageUrl,
+        }
+    return {
+        "id": userExists.id,
+        "nom": userExists.nom,
+        "prenom": userExists.prenom,
+        "email": userExists.email,
+        "role": userExists.role,
+    }

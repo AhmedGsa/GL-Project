@@ -8,6 +8,15 @@ class Role(enum.Enum):
     admin = "admin"
     avocat = "avocat"
 
+class Days(enum.Enum):
+    lundi = "lundi"
+    mardi = "mardi"
+    mercredi = "mercredi"
+    jeudi = "jeudi"
+    vendredi = "vendredi"
+    samedi = "samedi"
+    dimanche = "dimanche"
+
 class AvocatStatus(enum.Enum):
     pending = "pending"
     accepted = "accepted"
@@ -43,8 +52,11 @@ class Avocat(Base):
     status = Column(Enum(AvocatStatus), default="pending")
     isBlocked = Column(Boolean, default=False)
     categories = Column(JSON)
+    workDays = Column(JSON)
     rate = Column(Float, default=0)
     imageUrl = Column(String(255), nullable=True)
+    longitude = Column(Float, nullable=True)
+    latitude = Column(Float, nullable=True)
     userId = Column(Integer, ForeignKey("user.id"))
     user = relationship("User", back_populates="avocat")
     rating = relationship("Rating", back_populates="avocat")

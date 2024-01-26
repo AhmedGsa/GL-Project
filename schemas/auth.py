@@ -17,7 +17,11 @@ class AvocatRegisterSchema(UserRegisterSchema):
     facebookUrl: str
     Wilaya :str
     description: str
+    longitude: float
+    latitude: float
     categories: list[str] = []
+    workDays: list[str] = []
+    availabilityIds: list[str] = []
 
 class CreateAvocatSchema(BaseModel):
     address: str
@@ -25,6 +29,10 @@ class CreateAvocatSchema(BaseModel):
     facebookUrl: str
     Wilaya :str
     description: str
+    longitude: float
+    latitude: float
     categories: list[str] = []
+    workDays: list[str] = []
+    availabilityIds: list[str] = []
     userId: int
     imageUrl: str
