@@ -22,6 +22,10 @@ def get_available_times(avocatId: int, date: str, db = Depends(get_db)):
 def get_avocat_appointments(request: Request, db = Depends(get_db), token: str = Depends(bearer_scheme)):
     return appointment.get_avocat_appointments(db, request.state.user["id"])
 
+@router.get("/user-appointments")
+def get_user_appointments(request: Request, db = Depends(get_db), token: str = Depends(bearer_scheme)):
+    return appointment.get_user_appointments(db, request.state.user["id"])
+
 @router.patch("/mark-as-done/{appointmentId}")
 def mark_as_done(request: Request, appointmentId: int, db = Depends(get_db), token: str = Depends(bearer_scheme)):
     appointment.mark_as_done(db, appointmentId, request.state.user["id"])
@@ -31,3 +35,8 @@ def mark_as_done(request: Request, appointmentId: int, db = Depends(get_db), tok
 def mark_as_canceled(request: Request, appointmentId: int, db = Depends(get_db), token: str = Depends(bearer_scheme)):
     appointment.mark_as_canceled(db, appointmentId, request.state.user["id"])
     return {"message": "appointment marked as canceled !"}
+
+@router.delete("/delete/{appointmentId}")
+def delete_appointment(request: Request, appointmentId: int, db = Depends(get_db), token: str = Depends(bearer_scheme)):
+    appointment.delete(db, appointmentId, request.state.user["id"])
+    return {"message": "appointment deleted !"}
