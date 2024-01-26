@@ -32,3 +32,7 @@ def create(db: Session, avocatSchema: CreateAvocatSchema):
 def get_by_id(db: Session, id: int):
     avocat = db.query(Avocat).filter(Avocat.id == id).first()
     return avocat
+
+def get_by_user_id(db: Session, userId: int):
+    avocat = db.query(Avocat).filter(Avocat.userId == userId).first()
+    return avocat
