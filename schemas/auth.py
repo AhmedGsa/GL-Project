@@ -16,6 +16,8 @@ class AvocatRegisterSchema(UserRegisterSchema):
     phoneNumber: str
     facebookUrl: str
     description: str
+    longitude: float
+    latitude: float
     categories: list[str] = []
 
 class CreateAvocatSchema(BaseModel):
@@ -24,6 +26,8 @@ class CreateAvocatSchema(BaseModel):
     phoneNumber: str
     facebookUrl: str
     description: str
+    longitude: float
+    latitude: float
     categories: list[str] = []
     userId: int
     imageUrl: str

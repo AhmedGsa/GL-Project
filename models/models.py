@@ -45,6 +45,8 @@ class Avocat(Base):
     categories = Column(JSON)
     rate = Column(Float, default=0)
     imageUrl = Column(String(255), nullable=True)
+    longitude = Column(Float, nullable=True)
+    latitude = Column(Float, nullable=True)
     userId = Column(Integer, ForeignKey("user.id"))
     user = relationship("User", back_populates="avocat")
     rating = relationship("Rating", back_populates="avocat")

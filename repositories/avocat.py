@@ -13,6 +13,8 @@ def create(db: Session, avocatSchema: CreateAvocatSchema):
         facebookUrl=avocatSchema['facebookUrl'],
         description=avocatSchema['description'],
         categories=avocatSchema['categories'],
+        longitude=avocatSchema['longitude'],
+        latitude=avocatSchema['latitude'],
         userId=avocatSchema['userId'],
         imageUrl=avocatSchema['imageUrl']
     )
