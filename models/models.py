@@ -2,7 +2,7 @@ from config.db import Base
 from sqlalchemy import ForeignKey, String, Column, Integer, Boolean, DateTime, Float, Enum, JSON, Date, Text
 from sqlalchemy.orm import relationship
 import enum
-
+from config.const_db import URL_DB
 class Role(enum.Enum):
     user = "user"
     admin = "admin"
@@ -110,3 +110,49 @@ class Appointment(Base):
     user = relationship("User", back_populates="appointments")
     availabilityId = Column(Integer, ForeignKey("availability.id"))
     availability = relationship("Availability", back_populates="appointments")
+
+
+# import json
+# from sqlalchemy import create_engine
+# from sqlalchemy.orm import sessionmaker
+
+# # Load the data from the JSON file
+# with open('Scraped_Data.json') as f:
+#    data = json.load(f)
+
+# # Create a new engine and session
+# engine = create_engine(URL_DB)
+# Session = sessionmaker(bind=engine)
+# session = Session()
+
+# # Loop through each record in the data
+# for record in data:
+#    # Create a new User and Avocat object
+#    user = User(
+#        nom=record["name"],
+#        prenom=record["fname"],
+#        email=record["email"],
+#        password=None,
+#        isGoogleUser=False,
+#        createdAt=DateTime.utcnow(),
+#        role=Role.avocat
+#    )
+#    avocat = Avocat(
+#        address=record["address"],
+#        phoneNumber=record["phone"],
+#        facebookUrl=None,
+#        Wilaya=record["wilaya"][0] if record["wilaya"] else None,
+#        description=record["description"],
+#        status=AvocatStatus.pending,
+#        isBlocked=False,
+#        categories=record["categories"],
+#        imageUrl=record["avocat_image"],
+#        userId=user.id
+#    )
+   
+#    # Add the objects to the session
+#    session.add(user)
+#    session.add(avocat)
+
+# # Commit the transaction
+# session.commit()

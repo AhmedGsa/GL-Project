@@ -1,3 +1,4 @@
+from datetime import datetime
 from pydantic import BaseModel
 
 class LoginSchema(BaseModel):
@@ -12,9 +13,9 @@ class UserRegisterSchema(BaseModel):
 
 class AvocatRegisterSchema(UserRegisterSchema):
     address: str
-    wilaya:str
     phoneNumber: str
     facebookUrl: str
+    Wilaya :str
     description: str
     longitude: float
     latitude: float
@@ -24,9 +25,9 @@ class AvocatRegisterSchema(UserRegisterSchema):
 
 class CreateAvocatSchema(BaseModel):
     address: str
-    wilaya:str
     phoneNumber: str
     facebookUrl: str
+    Wilaya :str
     description: str
     longitude: float
     latitude: float

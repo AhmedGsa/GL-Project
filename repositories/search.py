@@ -2,9 +2,10 @@ from sqlalchemy.orm import Session
 from models.models import User, Role,Avocat
 
 class AvocatSearchResult:
-    def __init__(self, id, nom, prenom, email, createdAt, address, wilaya, phoneNumber, 
-                 facebookUrl, description, categories,rating, imageUrl):
+    def __init__(self, id,avocatId, nom, prenom, email, createdAt, address, wilaya, phoneNumber, 
+                 facebookUrl, description, categories,rate, imageUrl):
         self.id = id
+        self.avocatId = avocatId
         self.nom = nom
         self.prenom = prenom
         self.email = email
@@ -15,7 +16,7 @@ class AvocatSearchResult:
         self.facebookUrl = facebookUrl
         self.description = description
         self.categories = categories
-        self.rating = rating
+        self.rate = rate
         self.imageUrl = imageUrl
 
 def usersearch(name: str, wilaya: str, categorie: str,page:int,limit:int, db: Session):
@@ -49,6 +50,7 @@ def usersearch(name: str, wilaya: str, categorie: str,page:int,limit:int, db: Se
         avocat_search_results = [
             AvocatSearchResult(
                 id=user_instance.id,
+                avocatId = avocat_instance.id,
                 nom=user_instance.nom,
                 prenom=user_instance.prenom,
                 email=user_instance.email,
@@ -59,7 +61,7 @@ def usersearch(name: str, wilaya: str, categorie: str,page:int,limit:int, db: Se
                 facebookUrl=avocat_instance.facebookUrl,
                 description=avocat_instance.description,
                 categories=avocat_instance.categories,
-                rating=avocat_instance.rating,
+                rate=avocat_instance.rate,
                 imageUrl=avocat_instance.imageUrl
             )
             for user_instance, avocat_instance in searchresults
@@ -98,6 +100,7 @@ def adminsearch(name: str, wilaya: str, categorie: str,status:str,isBlocked:bool
         avocat_search_results = [
             AvocatSearchResult(
                 id=user_instance.id,
+                avocatId = avocat_instance.id,
                 nom=user_instance.nom,
                 prenom=user_instance.prenom,
                 email=user_instance.email,
@@ -108,7 +111,7 @@ def adminsearch(name: str, wilaya: str, categorie: str,status:str,isBlocked:bool
                 facebookUrl=avocat_instance.facebookUrl,
                 description=avocat_instance.description,
                 categories=avocat_instance.categories,
-                rating=avocat_instance.rating,
+                rate=avocat_instance.rate,
                 imageUrl=avocat_instance.imageUrl
             )
             for user_instance, avocat_instance in searchresults

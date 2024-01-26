@@ -15,25 +15,25 @@ def format_id(id: int) -> str:
 def getAdminById(id, db: Session):
     result = db.query(models.User).filter(models.User.id == id).first()
     if not result: 
-       raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, Detail=f'Admin with this id = {id} is not available')
+       raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f'Admin with this id = {id} is not available')
     if result.role != Role.admin:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, Detail='this user is not an admin')
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail='this user is not an admin')
     return result
 
 
 def get_Avocat_By_User_Id(id, db: Session):
     result = db.query(models.User).filter(models.User.id == id).first()
     if not result: 
-       raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, Detail=f'Admin with this id = {id} is not available')
+       raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f'Admin with this id = {id} is not available')
     if result.role != Role.avocat:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, Detail='this user is not an admin')
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail='this user is not an admin')
     return result
 
 
 def get_Avocat_by_Avocat_Id(db: Session, id: int):
     avocat = db.query(models.Avocat).filter(models.Avocat.id == id).first()
     if not avocat : 
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,Detail =f'Avocat with this email = {id} is not available')
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,detail =f'Avocat with this email = {id} is not available')
     return avocat
 
 
@@ -126,7 +126,7 @@ def destroyAvo(id, db: Session):
     if user:
         db.delete(user)
     else:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, Detail=f'Avocat or User with this id = {id} is not available')
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f'Avocat or User with this id = {id} is not available')
     db.commit()
     return {'avocat deleted Successfuly'}
 

@@ -1,4 +1,8 @@
 .env
 env
 uploads/
+<<<<<<< HEAD
+Data
+=======
 mysql
+>>>>>>> 3593b62e08f077a3772b7a062d97cefe81046085

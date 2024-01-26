@@ -5,8 +5,8 @@ from models import enumSTF
 
 
 class AvocatSchema(BaseModel):
-   name: str
-   fname: str
+   nom: str
+   prenom: str
    email: str
    password: str
    avocat_image :str
@@ -19,4 +19,3 @@ class AvocatSchema(BaseModel):
    facebookUrl : str
    description :str
    categories :Optional[enumSTF.AvocateCategoryEnum] = None 
-

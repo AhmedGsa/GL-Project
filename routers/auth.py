@@ -66,7 +66,7 @@ def register_user(userRegisterSchema: UserRegisterSchema, db: Session = Depends(
 
 @router.post("/register-avocat")
 def register_avocat(image: UploadFile, address: Annotated[str, Form()],wilaya:Annotated[str, Form()], phoneNumber: Annotated[str, Form()], facebookUrl: Annotated[str, Form()], description: Annotated[str, Form()], categories: Annotated[str, Form()], workDays: Annotated[str, Form()], availabilityIds: Annotated[str, Form()], email: Annotated[str, Form()], password: Annotated[str, Form()], nom: Annotated[str, Form()], prenom: Annotated[str, Form()], longitude: Annotated[str, Form()], latitude: Annotated[str, Form()], db: Session = Depends(get_db)):
-    avocatRegisterSchema = AvocatRegisterSchema(email=email, password=password, nom=nom, prenom=prenom, address=address,wilaya = wilaya, phoneNumber=phoneNumber, facebookUrl=facebookUrl, description=description, categories=categories.split(","),longitude=float(longitude), latitude=float(latitude), workDays=workDays.split(","), availabilityIds=availabilityIds.split(","))
+    avocatRegisterSchema = AvocatRegisterSchema(email=email, password=password, nom=nom, prenom=prenom, address=address,Wilaya = wilaya, phoneNumber=phoneNumber, facebookUrl=facebookUrl, description=description, categories=categories.split(","),longitude=float(longitude), latitude=float(latitude), workDays=workDays.split(","), availabilityIds=availabilityIds.split(","))
     userExists = user.get_by_email(db, avocatRegisterSchema.email)
     if userExists:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Email already used")

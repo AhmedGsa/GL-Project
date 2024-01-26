@@ -1,3 +1,4 @@
+
 from sqlalchemy.orm import Session
 from models.models import Avocat, AvailabilityAvocat
 from schemas.auth import CreateAvocatSchema
@@ -8,7 +9,7 @@ from datetime import datetime
 def create(db: Session, avocatSchema: CreateAvocatSchema):
     avocat = Avocat(
         address=avocatSchema['address'],
-        wilaya=avocatSchema['wilaya'],
+        wilaya=avocatSchema['Wilaya'],
         phoneNumber=avocatSchema['phoneNumber'],
         facebookUrl=avocatSchema['facebookUrl'],
         description=avocatSchema['description'],
