@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends, status, HTTPException, File, UploadFile, Form
+from fastapi.responses import RedirectResponse
 from config.db import get_db
 from sqlalchemy.orm import Session
 from schemas.auth import UserRegisterSchema, LoginSchema, AvocatRegisterSchema
@@ -48,7 +49,7 @@ async def auth_google(code: str, db: Session = Depends(get_db)):
         token = JWT.create_token({"id": newUser.id, "email": newUser.email, "role": f"{newUser.role}"})
         return {"token": token}
     token = JWT.create_token({"id": userExists.id, "email": userExists.email, "role": f"{userExists.role}"})
-    return {"token": token}
+    return RedirectResponse(f"http://localhost:5173/login?token={token}")
 
 @router.post("/register-user")
 def register_user(userRegisterSchema: UserRegisterSchema, db: Session = Depends(get_db)):
