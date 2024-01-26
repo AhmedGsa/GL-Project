@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException,status
+from fastapi import APIRouter, Depends, HTTPException, Request,status
 from fastapi.security import HTTPBearer
 from jose import JWTError
 from utils.jwt import JWT
@@ -15,18 +15,17 @@ router = APIRouter(prefix="/rating", tags=["Rating"])
 httpBearer = HTTPBearer();
 
 @router.post("/rate")
-def rate(rateSchema: RateSchema,token:dict=Depends(httpBearer),db:Session=Depends(get_db)):
+def rate(request: Request,rateSchema: RateSchema,token:dict=Depends(httpBearer),db:Session=Depends(get_db)):
     #check if the user and the avocat exist
-    userid = token.get("id")
     checkavocat = avocat.get_by_id(db, rateSchema.avocatId)
-    checkuser = user.get_by_id(db, userid)
+    checkuser = user.get_by_id(db, request.state.user["id"])
     if (not checkavocat or not checkuser):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User or Avocat not found")
     #check if the user is rating his self
     if checkuser.id == checkavocat.userId:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="You can't rate your self")
     #check if the user already rated this avocat
-    if(aleadyRated(rateSchema.avocatId,userid,db)):
+    if(aleadyRated(rateSchema.avocatId,request.state.user["id"],db)):
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="User already rated this avocat")
     #validate the rate
     if(rateSchema.rate < 0 or rateSchema.rate > 5):

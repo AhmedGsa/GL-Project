@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Session
-from models.models import User, Role
+from models.models import User,Role
 from schemas.auth import UserRegisterSchema
 from utils.hashing import Hash
 from datetime import datetime

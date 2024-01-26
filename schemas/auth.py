@@ -1,6 +1,5 @@
+from datetime import datetime
 from pydantic import BaseModel
-from fastapi import UploadFile, File
-from typing import Annotated
 
 class LoginSchema(BaseModel):
     email: str
@@ -14,17 +13,17 @@ class UserRegisterSchema(BaseModel):
 
 class AvocatRegisterSchema(UserRegisterSchema):
     address: str
-    wilaya:str
     phoneNumber: str
     facebookUrl: str
+    Wilaya :str
     description: str
     categories: list[str] = []
 
 class CreateAvocatSchema(BaseModel):
     address: str
-    wilaya:str
     phoneNumber: str
     facebookUrl: str
+    Wilaya :str
     description: str
     categories: list[str] = []
     userId: int
