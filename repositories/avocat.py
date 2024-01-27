@@ -23,7 +23,27 @@ def create(db: Session, avocatSchema: CreateAvocatSchema):
     db.add(avocat)
     db.commit()
     db.refresh(avocat)
-    print(avocatSchema['availabilityIds'])
+    for availabilityId in avocatSchema['availabilityIds']:
+        db.add(AvailabilityAvocat(availabilityId=availabilityId, avocatId=avocat.id))
+    db.commit()
+    db.refresh(avocat)
+    return avocat
+
+def update(db: Session, userId: int, avocatSchema: CreateAvocatSchema):
+    avocat = get_by_user_id(db, userId)
+    avocat.address = avocatSchema['address']
+    avocat.wilaya = avocatSchema['Wilaya']
+    avocat.phoneNumber = avocatSchema['phoneNumber']
+    avocat.facebookUrl = avocatSchema['facebookUrl']
+    avocat.description = avocatSchema['description']
+    avocat.categories = avocatSchema['categories']
+    avocat.longitude = avocatSchema['longitude']
+    avocat.latitude = avocatSchema['latitude']
+    avocat.imageUrl = avocatSchema['imageUrl'] if avocatSchema['imageUrl'] else avocat.imageUrl
+    avocat.workDays = avocatSchema['workDays']
+    db.commit()
+    db.refresh(avocat)
+    db.query(AvailabilityAvocat).filter(AvailabilityAvocat.avocatId == avocat.id).delete()
     for availabilityId in avocatSchema['availabilityIds']:
         db.add(AvailabilityAvocat(availabilityId=availabilityId, avocatId=avocat.id))
     db.commit()

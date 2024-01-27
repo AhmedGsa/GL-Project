@@ -30,3 +30,19 @@ def get_by_email(db: Session, email: str):
 def get_by_id(db: Session, id: int):
     user = db.query(User).filter(User.id == id).first()
     return user
+
+def update(db: Session, userId: int, userSchema: UserRegisterSchema):
+    user = get_by_id(db, userId)
+    user.nom = userSchema.nom
+    user.prenom = userSchema.prenom
+    user.email = userSchema.email
+    db.commit()
+    db.refresh(user)
+    return user
+
+def update_password(db: Session, userId: int, newPassword: str):
+    user = get_by_id(db, userId)
+    user.password = Hash.bcrypt(newPassword)
+    db.commit()
+    db.refresh(user)
+    return user
