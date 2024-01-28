@@ -130,3 +130,13 @@ def destroyAvo(id, db: Session):
     db.commit()
     return {'avocat deleted Successfuly'}
 
+
+def destroyUser(email, db: Session):
+
+    user = db.query(models.User).filter(models.User.email == email).first()
+    if user:
+        db.delete(user)
+    else:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f'Avocat or User with this id = {id} is not available')
+    db.commit()
+    return {'avocat deleted Successfuly'}
