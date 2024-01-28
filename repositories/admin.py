@@ -103,7 +103,6 @@ def block(db: Session, id: str):
     if avocat.isBlocked:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="this avocat is already Blocked")
     avocat.isBlocked = True
-    avocat.status = AvocatStatus.pending
     db.commit()
     return {"detail": f"Avocat {id} has been Blocked"}
 
@@ -112,7 +111,6 @@ def Unblock(db: Session, id: str):
     if not avocat.isBlocked:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="this avocat is already UnBlocked")
     avocat.isBlocked = False
-    avocat.status = AvocatStatus.pending
     db.commit()
     return {"detail": f"Avocat {id} has been UnBlocked"}
 
