@@ -47,3 +47,14 @@ def change_password(request: Request, changePasswordSchema: ChangePassword, db: 
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Password is incorrect")
     user.update_password(db, userId, changePasswordSchema.newPassword)
     return {"message": "Password updated successfully"}
+
+@router.get("/")
+def get_avocat_info(request: Request, db: Session = Depends(get_db), token: str = Depends(bearer_scheme)):
+    userId = request.state.user["id"]
+    userExists = user.get_by_id(db, userId)
+    if not userExists:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
+    avocatExists = avocat.get_all_info_by_user_id(db, userId)
+    if not avocatExists:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Avocat not found")
+    return {"nom": userExists.nom, "prenom": userExists.prenom, "email": userExists.email, "address": avocatExists.address, "wilaya": avocatExists.wilaya, "phoneNumber": avocatExists.phoneNumber, "facebookUrl": avocatExists.facebookUrl, "description": avocatExists.description, "categories": avocatExists.categories, "workDays": avocatExists.workDays, "availabilityIds": avocatExists.availabilityIds, "longitude": avocatExists.longitude, "latitude": avocatExists.latitude, "imageUrl": avocatExists.imageUrl}

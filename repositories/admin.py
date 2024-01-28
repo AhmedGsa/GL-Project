@@ -51,7 +51,7 @@ def getAllAvocats(page_num:int,page_size:int ,db: Session):
 
     sliced_avocats = avocats[start:end]
     response ={
-       "data": [ShowAvocat(ID =format_id(avocat.user.id), nom=avocat.user.nom, prenom=avocat.user.prenom, email=avocat.user.email, role=avocat.user.role, phoneNumber=avocat.phoneNumber, Wilaya=avocat.Wilaya, status=avocat.status, isBlocked=avocat.isBlocked, categories=avocat.categories) for avocat in sliced_avocats],
+       "data": [ShowAvocat(ID =format_id(avocat.user.id), nom=avocat.user.nom, prenom=avocat.user.prenom, email=avocat.user.email, role=avocat.user.role, phoneNumber=avocat.phoneNumber, Wilaya=avocat.wilaya, status=avocat.status, isBlocked=avocat.isBlocked, categories=avocat.categories) for avocat in sliced_avocats],
        "total": total_avocats,
         "count":page_size,
         "pagination":{
@@ -67,11 +67,11 @@ def getAllAvocats(page_num:int,page_size:int ,db: Session):
 
 def get_Non_validate_Avos(db: Session):
    avocats = db.query(models.User, models.Avocat).join(models.Avocat, models.User.id == models.Avocat.userId).filter(models.User.role == Role.avocat, models.Avocat.status == AvocatStatus.pending).all()
-   return [ShowAvocat(ID =format_id(avocat.user.id) ,nom=user.nom, prenom=user.prenom, email=user.email,role=avocat.user.role, phoneNumber=avocat.phoneNumber, Wilaya=avocat.Wilaya, status=avocat.status, isBlocked=avocat.isBlocked, categories=avocat.categories) for user, avocat in avocats]
+   return [ShowAvocat(ID =format_id(avocat.user.id) ,nom=user.nom, prenom=user.prenom, email=user.email,role=avocat.user.role, phoneNumber=avocat.phoneNumber, Wilaya=avocat.wilaya, status=avocat.status, isBlocked=avocat.isBlocked, categories=avocat.categories) for user, avocat in avocats]
 
 def get_validate_Avos(db: Session):
     avocats = db.query(models.User, models.Avocat).join(models.Avocat, models.User.id == models.Avocat.userId).filter(models.User.role == Role.avocat, models.Avocat.status == AvocatStatus.accepted).all() 
-    return [ShowAvocat(ID =format_id(avocat.user.id),nom=user.nom, prenom=user.prenom, email=user.email,role=avocat.user.role, phoneNumber=avocat.phoneNumber, Wilaya=avocat.Wilaya, status=avocat.status, isBlocked=avocat.isBlocked, categories=avocat.categories) for user, avocat in avocats]
+    return [ShowAvocat(ID =format_id(avocat.user.id),nom=user.nom, prenom=user.prenom, email=user.email,role=avocat.user.role, phoneNumber=avocat.phoneNumber, Wilaya=avocat.wilaya, status=avocat.status, isBlocked=avocat.isBlocked, categories=avocat.categories) for user, avocat in avocats]
 
 
 def accepte(db: Session, id: str):

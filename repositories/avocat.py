@@ -57,3 +57,8 @@ def get_by_id(db: Session, id: int):
 def get_by_user_id(db: Session, userId: int):
     avocat = db.query(Avocat).filter(Avocat.userId == userId).first()
     return avocat
+
+def get_all_info_by_user_id(db: Session, userId: int):
+    avocat = db.query(Avocat).filter(Avocat.userId == userId).first()
+    avocat.availabilityIds = [availability.availabilityId for availability in db.query(AvailabilityAvocat).filter(AvailabilityAvocat.avocatId == avocat.id).all()]
+    return avocat
