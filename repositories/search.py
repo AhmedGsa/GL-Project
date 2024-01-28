@@ -68,7 +68,7 @@ def usersearch(name: str, wilaya: str, categorie: str,page:int,limit:int, db: Se
                 rate=avocat_instance.rate,
                 imageUrl=avocat_instance.imageUrl,
                 status=avocat_instance.status,
-                isblocked=avocat_instance.isBlocked
+                isBlocked=avocat_instance.isBlocked
             )
             for user_instance, avocat_instance in searchresults
         ]
@@ -128,7 +128,7 @@ def adminsearch(name: str, wilaya: str, categorie: str,status:str,isBlocked:bool
                 rate=avocat_instance.rate,
                 imageUrl=avocat_instance.imageUrl,
                 status=avocat_instance.status,
-                isblocked=avocat_instance.isBlocked
+                isBlocked=avocat_instance.isBlocked
             )
             for user_instance, avocat_instance in searchresults
         ]
