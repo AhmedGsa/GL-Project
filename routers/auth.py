@@ -23,6 +23,9 @@ def login(loginSchema: LoginSchema, db: Session = Depends(get_db)):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
     if not Hash.compare(userExists.password, loginSchema.password):
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Incorrect password")
+    avocatExist = avocat.get_by_user_id(db, userExists.id)
+    if avocatExist and avocatExist.isBlocked:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Account blocked")
     token = JWT.create_token({"id": userExists.id, "email": userExists.email})
     return {"token": token}
 

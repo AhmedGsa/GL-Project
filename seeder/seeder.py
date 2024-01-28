@@ -51,7 +51,7 @@ for item in data:
     val = (item["name"], item["fname"], item["email"])
     mycursor.execute(sql, val)
     mydb.commit()
-    sql = "INSERT INTO avocat (address, wilaya, phoneNumber, facebookUrl, description, categories, rate, imageUrl, longitude, latitude, userId, status, isBlocked) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, \"pending\", 0)"
+    sql = "INSERT INTO avocat (address, wilaya, phoneNumber, facebookUrl, description, categories, rate, imageUrl, longitude, latitude, userId, status, isBlocked) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, \"accepted\", 0)"
     val = (item["address"], item["wilaya"], item["phone"], item["social"], item["description"], json.dumps(item["categories"]), item["rating"], item["avocat_image"], item["longitude"], item["latitude"], mycursor.lastrowid)
     mycursor.execute(sql, val)
     mydb.commit()
