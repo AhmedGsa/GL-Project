@@ -87,7 +87,9 @@ def getTopRated(limit:int , db:Session):
                 description=avocat_instance.description,
                 categories=avocat_instance.categories,
                 rate=avocat_instance.rate,
-                imageUrl=avocat_instance.imageUrl
+                imageUrl=avocat_instance.imageUrl,
+                status=avocat_instance.status,
+                isBlocked=avocat_instance.isBlocked,
             )
             for user_instance, avocat_instance in mostRated
         ]

@@ -3,7 +3,7 @@ from models.models import User, Role,Avocat
 
 class AvocatSearchResult:
     def __init__(self, id,avocatId, nom, prenom, email, createdAt, address, wilaya, phoneNumber, 
-                 facebookUrl, description, categories,rate, imageUrl):
+                 facebookUrl, description, categories,rate, imageUrl,status,isBlocked):
         self.id = id
         self.avocatId = avocatId
         self.nom = nom
@@ -18,6 +18,8 @@ class AvocatSearchResult:
         self.categories = categories
         self.rate = rate
         self.imageUrl = imageUrl
+        self.status = status
+        self.isBlocked = isBlocked
 
 def usersearch(name: str, wilaya: str, categorie: str,page:int,limit:int, db: Session):
     
@@ -43,8 +45,10 @@ def usersearch(name: str, wilaya: str, categorie: str,page:int,limit:int, db: Se
     if len(categorie) > 0:
         searchquery = searchquery.filter(Avocat.categories.contains(categorie))
 
+    count = searchquery.count()
     searchresults = searchquery.offset((page-1)*limit).limit(limit).all()
 
+    avocat_search_results = None
     if searchresults:
         
         avocat_search_results = [
@@ -62,13 +66,22 @@ def usersearch(name: str, wilaya: str, categorie: str,page:int,limit:int, db: Se
                 description=avocat_instance.description,
                 categories=avocat_instance.categories,
                 rate=avocat_instance.rate,
-                imageUrl=avocat_instance.imageUrl
+                imageUrl=avocat_instance.imageUrl,
+                status=avocat_instance.status,
+                isblocked=avocat_instance.isBlocked
             )
             for user_instance, avocat_instance in searchresults
         ]
-        return avocat_search_results
-    else:
-        return None
+
+    if(avocat_search_results != None):
+        return {
+                "result":avocat_search_results,
+                "count":count
+            }
+    else :
+        return {"result":"No results found",
+                "count":0
+                }
     
 def adminsearch(name: str, wilaya: str, categorie: str,status:str,isBlocked:bool,page:int,limit:int, db: Session):
     searchquery = (
@@ -92,9 +105,10 @@ def adminsearch(name: str, wilaya: str, categorie: str,status:str,isBlocked:bool
     #filter with Category if they give a list of categorie from the frontend
     if len(categorie) > 0:
         searchquery = searchquery.filter(Avocat.categories.contains(categorie))
-
+    count = searchquery.count()
     searchresults = searchquery.offset((page-1)*limit).limit(limit).all()
 
+    avocat_search_results = None
     if searchresults:
         
         avocat_search_results = [
@@ -112,10 +126,19 @@ def adminsearch(name: str, wilaya: str, categorie: str,status:str,isBlocked:bool
                 description=avocat_instance.description,
                 categories=avocat_instance.categories,
                 rate=avocat_instance.rate,
-                imageUrl=avocat_instance.imageUrl
+                imageUrl=avocat_instance.imageUrl,
+                status=avocat_instance.status,
+                isblocked=avocat_instance.isBlocked
             )
             for user_instance, avocat_instance in searchresults
         ]
-        return avocat_search_results
-    else:
-        return None
+        
+    if(avocat_search_results != None):
+        return {
+                "result":avocat_search_results,
+                "count":count
+            }
+    else :
+        return {"result":"No results found",
+                "count":0
+                }
