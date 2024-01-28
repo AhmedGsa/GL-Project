@@ -9,3 +9,5 @@ python-multipart
 requests
 bcrypt
 mysql-connector-python
+httpx
+pytest

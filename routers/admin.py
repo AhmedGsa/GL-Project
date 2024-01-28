@@ -63,6 +63,10 @@ async def UnBlock_avocat(avocat_id: int,db :Session = Depends(get_db)):
 async def delete_lawyer(avocat_id: int,db :Session = Depends(get_db)):
    return admin.destroyAvo(avocat_id,db)
 
+@router.delete("/users/{user_email}")
+async def delete_user(user_email: str,db :Session = Depends(get_db)):
+   return admin.destroyUser(user_email,db)
+
 
 
 
